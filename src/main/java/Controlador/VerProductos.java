@@ -1,6 +1,7 @@
 package Controlador;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.servlet.ServletException;
@@ -31,6 +32,7 @@ public class VerProductos extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 		ModeloProducto ModeloProducto = new ModeloProducto();
 
 		ModeloProducto.conectar();

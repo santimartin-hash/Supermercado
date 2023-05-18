@@ -25,6 +25,7 @@
                 <th>Precio</th>
                 <th>Caducidad</th>
                 <th>NombreSeccion</th>
+                <th><a href="InsertarProducto" class="btn btn-primary" style="margin-left: 40px;">InsertarUsuario</a></th>
               </tr>
             </thead>
             <tbody>
@@ -37,6 +38,7 @@
 					     <td>${producto.precio}</td>
 					     <td>${producto.caducidad}</td>
 					     <td>${producto.nombreSeccion}</td>
+					     <td></td>
 					    </tr>
 			</c:forEach>  
             </tbody>

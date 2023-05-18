@@ -1,6 +1,6 @@
 package Modelo;
 
-public class Secciones {
+public class Seccion {
 	private int id;
 	private String Nombre;
 	public int getId() {
