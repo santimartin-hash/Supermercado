@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 
 
+
+
 public class ModeloProducto extends Conector{
 	PreparedStatement pst;
 	ResultSet rs;
@@ -62,25 +64,22 @@ public class ModeloProducto extends Conector{
 		return productos;
 	}
 	
-	public ArrayList<Producto> ConsultarCodigo(String codigo) {
-		ArrayList<Producto> CodigoProductos = new ArrayList<Producto>();
-		try {
-			pst = conexion.prepareStatement("SELECT * FROM  productos Where codigo = ?");
-			pst.setString(2, codigo);
-			
-			pst.executeQuery();
-			rs = pst.executeQuery();
-			
-			while(rs.next()) {
-				Producto producto = new Producto();
-				producto.setCodigo(codigo);
-				CodigoProductos.add(producto);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return CodigoProductos;
+public String ConsultarCodigo(String codigo) throws SQLException {
+		
+		pst = conexion.prepareStatement("SELECT codigo FROM  productos Where codigo = ? ");
+		
+		pst.setString(1, codigo);
+		
+		pst.executeQuery();
 
+		rs = pst.executeQuery();
+		
+		Producto producto = new Producto();
+		
+		while(rs.next()) {	
+			producto.setCodigo(rs.getString("Codigo"));
+		}
+		
+		return producto.getCodigo();
 	}
 }

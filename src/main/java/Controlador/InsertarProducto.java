@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.servlet.ServletException;
@@ -61,10 +62,7 @@ public class InsertarProducto extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ModeloProducto ModeloProducto = new ModeloProducto();
 
-		ModeloProducto.conectar();
-		ArrayList<Producto> productos = ModeloProducto.getProductos();
-		request.setAttribute("productos", productos);
-		ModeloProducto.cerrar();
+	
 		
 		
 		SimpleDateFormat fechaFormato = new SimpleDateFormat("yyyy-MM-dd");
@@ -79,17 +77,6 @@ public class InsertarProducto extends HttpServlet {
 		Date fechaCaducidad;
 		int id_seccion =Integer.parseInt( request.getParameter("seccion"));
 		
-
-		
-		
-		try {
-			fechaCaducidad = fechaFormato.parse(caducidad);
-			producto.setCaducidad(fechaCaducidad);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		producto.setId(id);
 		producto.setCodigo(codigo);
 		producto.setNombre(nombre);
@@ -97,21 +84,48 @@ public class InsertarProducto extends HttpServlet {
 		producto.setPrecio(precio);
 		producto.setId_seccion(id_seccion);
 		
-		for (Producto producto2 : productos) {
-			System.out.println(producto2.getCodigo());
-			if (producto.getCodigo() == producto2.getCodigo()) {
-				request.setAttribute("mensaje", "Codigo Duplicado");
-				request.getRequestDispatcher("InsertarProducto.jsp").forward(request, response);
+		try {
+			fechaCaducidad = fechaFormato.parse(caducidad);
+			producto.setCaducidad(fechaCaducidad);
+			
+			ModeloProducto.conectar();
+			Calendar calendar = Calendar.getInstance();
+	        Date currentDate = calendar.getTime();        
+			String CodigoBBDD;
+			try {
+				
+				CodigoBBDD = ModeloProducto.ConsultarCodigo(codigo);
+				if (codigo.equals(CodigoBBDD)) {
+					request.setAttribute("mensaje", "Codigo Duplicado");
+					request.getRequestDispatcher("InsertarProducto.jsp").forward(request, response);	
+				} else if (precio < 0 || cantidad < 0){
+					request.setAttribute("mensaje", "Precio y Cantidad deben de ser positivos");
+					request.getRequestDispatcher("InsertarProducto.jsp").forward(request, response);
+				} else if (fechaCaducidad.before(currentDate)){
+					request.setAttribute("mensaje", "Fecha invalida");
+					request.getRequestDispatcher("InsertarProducto.jsp").forward(request, response);
+				} else if (id_seccion == 0){
+					request.setAttribute("mensaje", "introduce una seccion");
+					request.getRequestDispatcher("InsertarProducto.jsp").forward(request, response);
 				} else {
-					ModeloProducto.conectar();
-					ModeloProducto.insertarProducto(producto);
-					ModeloProducto.cerrar();
-					request.getRequestDispatcher("VerProductos").forward(request, response);
+				ModeloProducto.insertarProducto(producto);
+				ModeloProducto.cerrar();
+				request.getRequestDispatcher("VerProductos").forward(request, response);
 				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+
+		
+}
 		
 		
 	      
-	}
+	
 
 }
