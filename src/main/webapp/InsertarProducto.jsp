@@ -8,6 +8,9 @@
 <title>Insert title here</title>
 </head>
 <body>
+   <c:if test="${not empty mensaje}">
+  <div class="alert alert-danger">${mensaje}</div>
+</c:if>
 <h1>Insertar Producto</h1>
   
   <div class="container mt-5">

@@ -39,7 +39,7 @@ public class ModeloProducto extends Conector{
 		
 		ArrayList<Producto> productos = new ArrayList<Producto>();
 		try {
-			pst = conexion.prepareStatement("SELECT productos.id, codigo, productos.nombre, cantidad, precio, caducidad, id_seccion, Secciones.Nombre AS NombreSeccion FROM  productos INNER JOIN Secciones on productos.id_seccion = secciones.id");
+			pst = conexion.prepareStatement("SELECT productos.id, codigo, productos.nombre, cantidad, precio, caducidad, id_seccion, Secciones.Nombre AS NombreSeccion FROM  productos INNER JOIN Secciones on productos.id_seccion = secciones.id ");
 			pst.executeQuery();
 			
 			rs = pst.executeQuery();
@@ -60,5 +60,27 @@ public class ModeloProducto extends Conector{
 			e.printStackTrace();
 		}
 		return productos;
+	}
+	
+	public ArrayList<Producto> ConsultarCodigo(String codigo) {
+		ArrayList<Producto> CodigoProductos = new ArrayList<Producto>();
+		try {
+			pst = conexion.prepareStatement("SELECT * FROM  productos Where codigo = ?");
+			pst.setString(2, codigo);
+			
+			pst.executeQuery();
+			rs = pst.executeQuery();
+			
+			while(rs.next()) {
+				Producto producto = new Producto();
+				producto.setCodigo(codigo);
+				CodigoProductos.add(producto);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return CodigoProductos;
+
 	}
 }

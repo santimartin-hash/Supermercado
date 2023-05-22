@@ -25,7 +25,7 @@
                 <th>Precio</th>
                 <th>Caducidad</th>
                 <th>NombreSeccion</th>
-                <th><a href="InsertarProducto" class="btn btn-primary" style="margin-left: 40px;">InsertarUsuario</a></th>
+                <th><a href="InsertarProducto" class="btn btn-primary" style="margin-left: 40px;">InsertarProducto</a></th>
               </tr>
             </thead>
             <tbody>

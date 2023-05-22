@@ -39,8 +39,9 @@ public class InsertarProducto extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    ModeloSeccion modeloSeccion = new ModeloSeccion();
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
+		
+		ModeloSeccion modeloSeccion = new ModeloSeccion();
         modeloSeccion.conectar();
        try {
 		ArrayList<Seccion> secciones = modeloSeccion.getSecciones();
@@ -58,8 +59,15 @@ public class InsertarProducto extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		SimpleDateFormat fechaFormato = new SimpleDateFormat("yyyy-MM-dd");
 		ModeloProducto ModeloProducto = new ModeloProducto();
+
+		ModeloProducto.conectar();
+		ArrayList<Producto> productos = ModeloProducto.getProductos();
+		request.setAttribute("productos", productos);
+		ModeloProducto.cerrar();
+		
+		
+		SimpleDateFormat fechaFormato = new SimpleDateFormat("yyyy-MM-dd");
 		Producto producto = new Producto();
 		
 		int id = Integer.parseInt(request.getParameter("id"));
@@ -70,6 +78,10 @@ public class InsertarProducto extends HttpServlet {
 		String caducidad = request.getParameter("caducidad");
 		Date fechaCaducidad;
 		int id_seccion =Integer.parseInt( request.getParameter("seccion"));
+		
+
+		
+		
 		try {
 			fechaCaducidad = fechaFormato.parse(caducidad);
 			producto.setCaducidad(fechaCaducidad);
@@ -84,10 +96,22 @@ public class InsertarProducto extends HttpServlet {
 		producto.setCantidad(cantidad);
 		producto.setPrecio(precio);
 		producto.setId_seccion(id_seccion);
-		ModeloProducto.conectar();
-		ModeloProducto.insertarProducto(producto);
-		ModeloProducto.cerrar();
-	       request.getRequestDispatcher("VerProductos").forward(request, response);
+		
+		for (Producto producto2 : productos) {
+			System.out.println(producto2.getCodigo());
+			if (producto.getCodigo() == producto2.getCodigo()) {
+				request.setAttribute("mensaje", "Codigo Duplicado");
+				request.getRequestDispatcher("InsertarProducto.jsp").forward(request, response);
+				} else {
+					ModeloProducto.conectar();
+					ModeloProducto.insertarProducto(producto);
+					ModeloProducto.cerrar();
+					request.getRequestDispatcher("VerProductos").forward(request, response);
+				}
+		}
+		
+		
+	      
 	}
 
 }
