@@ -27,7 +27,8 @@
         <button class="btn btn-outline-success" type="submit">Filtrar</button>
       </form>
     </div>
- 
+<a href="VerProductos?Filtro=1" class="btn btn-secondary">Codigo Ascendente</a>
+<a href="VerProductos?Filtro=2" class="btn btn-secondary">Codigo Descendente</a>
      <h3 class="mt-5">Productos:</h3>
     <div class="table-container mt-5">
       <table class="table table-striped table-dark table-responsive-md mt-5">

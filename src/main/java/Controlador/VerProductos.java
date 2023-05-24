@@ -3,6 +3,7 @@ package Controlador;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 
 import javax.servlet.ServletException;
@@ -18,7 +19,7 @@ import Modelo.Producto;
  * Servlet implementation class VerProductos
  */
 @WebServlet("/VerProductos")
-public class VerProductos extends HttpServlet {
+public class VerProductos extends HttpServlet implements Comparator<Producto>{
 	private static final long serialVersionUID = 1L;
        
     /**
@@ -78,8 +79,10 @@ public class VerProductos extends HttpServlet {
 		    }
 		}
 		}
-			
-		
+		String Filtro = request.getParameter("Filtro");
+		if (Filtro != null )	{
+		productos.sort(this);
+		}
 		request.setAttribute("productos", productos);
 		ModeloProducto.cerrar();
 		
@@ -93,5 +96,19 @@ public class VerProductos extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
+
+	@Override
+	public int compare(Producto o1, Producto o2) {
+		Producto producto1 = (Producto) o1;
+		Producto producto2 = (Producto) o2;
+		return (producto1.getCodigo().compareTo(producto2.getCodigo()));
+	}
+	
+	/*public int compare2(Producto o1, Producto o2) {
+		Producto producto1 = (Producto) o1;
+		Producto producto2 = (Producto) o2;
+		return (producto1.getCodigo().compareTo(producto2.getCodigo()));
+	}*/
+
 
 }
