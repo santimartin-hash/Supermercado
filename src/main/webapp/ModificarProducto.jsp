@@ -16,41 +16,39 @@
    <c:if test="${not empty mensaje}">
   <div class="alert alert-danger">${mensaje}</div>
 </c:if>
-<h1>Insertar Producto</h1>
+<h1>Modificar Producto</h1>
   
   <div class="container mt-5">
   
-  <form method="post" action="InsertarProducto" id="form_insertar_producto" >
+  <form method="post" action="ModificarProducto" id="form_modificar_producto" >
    <div class="form-group">
       <label>Id:</label>
-      <input type="text" name="id" class="form-control" required /><br/>
+      <input type="text" name="id" class="form-control" value="${producto.id}" required /><br/>
     </div>
       <div class="form-group">
       <label>Codigo:</label>
-      <input type="text" name="codigo" class="form-control" required /><br/>
+      <input type="text" name="codigo" class="form-control" value="${producto.codigo}" required /><br/>
     </div>
     <div class="form-group">
       <label>Nombre:</label>
-      <input type="text" name="nombre" class="form-control" required /><br/>
+      <input type="text" name="nombre" class="form-control" value="${producto.nombre}" required /><br/>
     </div>
     <div class="form-group">
       <label>Cantidad:</label>
-      <input type="text" name="cantidad" class="form-control" required /><br/>
+      <input type="text" name="cantidad" class="form-control" value="${producto.cantidad}" required /><br/>
     </div>
     <div class="form-group">
       <label>Precio:</label>
-      <input type="text" name="precio" class="form-control" required /><br/>
+      <input type="text" name="precio" class="form-control"  value="${producto.precio}" required /><br/>
     </div>
       <div class="form-group">
       <label>Caducidad:</label>
-      <input type="date" name="caducidad" class="form-control" required /><br/>
+      <input type="date" name="caducidad" class="form-control"  value="${producto.caducidad}" required /><br/>
     </div>
- <select class="form-control" id="seccion" name="seccion"  >
-    <option value="0">--Selecciona una Seccion--</option>
-    <c:forEach items="${secciones}" var="seccion">
-      <option value="${seccion.id}">${seccion.nombre}</option>
-    </c:forEach>
-  </select>
+ <div class="form-group">
+      <label>id seccion:</label>
+      <input type="text" name="seccion" class="form-control"  value="${producto.id_seccion}" required /><br/>
+    </div>
     <input type="submit" value="Continuar" class="btn btn-primary mt-4" name="continuar_insertar_seccion"/>
   </form>
 </div>

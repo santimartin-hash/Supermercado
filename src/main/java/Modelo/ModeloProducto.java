@@ -36,6 +36,22 @@ public class ModeloProducto extends Conector{
 		}
 
 	}
+	public void modificarProducto(Producto producto) {
+	    try {
+	        pst = conexion.prepareStatement("UPDATE productos SET codigo=?, nombre=?, cantidad=?, precio=?, caducidad=?, id_seccion=? WHERE id=?");
+	        pst.setString(1, producto.getCodigo());
+	        pst.setString(2, producto.getNombre());
+	        pst.setInt(3, producto.getCantidad());
+	        pst.setDouble(4, producto.getPrecio());
+	        pst.setDate(5, new Date(producto.getCaducidad().getTime()));
+	        pst.setInt(6, producto.getId_seccion());
+	        pst.setInt(7, producto.getId());
+	        pst.executeUpdate();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+
 	
 	public ArrayList<Producto> getProductos() {
 		
@@ -62,6 +78,34 @@ public class ModeloProducto extends Conector{
 			e.printStackTrace();
 		}
 		return productos;
+	}
+	
+public Producto getProductoId(int id) {
+		ArrayList<Producto> productos = new ArrayList<Producto>();
+		Producto producto = new Producto();
+		try {
+			pst = conexion.prepareStatement("SELECT productos.id, codigo, productos.nombre, cantidad, precio, caducidad, id_seccion, Secciones.Nombre AS NombreSeccion FROM  productos INNER JOIN Secciones on productos.id_seccion = secciones.id WHERE productos.id = ? ");
+			pst.setInt(1, id);
+			
+			pst.executeQuery();
+			
+			rs = pst.executeQuery();
+			while(rs.next()) {
+				producto.setId(rs.getInt("id"));
+				producto.setCodigo(rs.getString("codigo"));
+				producto.setNombre(rs.getString("Nombre"));
+				producto.setCantidad(rs.getInt("cantidad"));
+				producto.setPrecio(rs.getDouble("precio"));
+				producto.setCaducidad(rs.getDate("caducidad"));
+				producto.setId_seccion(rs.getInt("id_seccion"));
+				producto.setNombreSeccion(rs.getString("NombreSeccion"));
+				productos.add(producto);
+			}
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		return producto;
 	}
 	
 public String ConsultarCodigo(String codigo) throws SQLException {
