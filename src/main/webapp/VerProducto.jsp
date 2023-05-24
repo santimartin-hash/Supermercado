@@ -20,6 +20,14 @@
         <button class="btn btn-outline-success" type="submit">Buscar</button>
       </form>
     </div>
+     <div class="d-flex justify-content-end mt-2">
+      <form class="form-inline d-flex">
+        <input class="form-control mr-2" type="number" step="0.1" placeholder="Precio minimo" aria-label="PrecioMin" name="PrecioMin" autocomplete="off">
+        <input class="form-control mr-2" type="number" step="0.1" placeholder="Precio maximo" aria-label="PrecioMax" name="PrecioMax" autocomplete="off">
+        <button class="btn btn-outline-success" type="submit">Filtrar</button>
+      </form>
+    </div>
+ 
      <h3 class="mt-5">Productos:</h3>
     <div class="table-container mt-5">
       <table class="table table-striped table-dark table-responsive-md mt-5">

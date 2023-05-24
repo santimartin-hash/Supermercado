@@ -36,6 +36,7 @@ public class VerProductos extends HttpServlet {
 
 		ModeloProducto ModeloProducto = new ModeloProducto();
 		String cadena = request.getParameter("cadena");
+	
 		ModeloProducto.conectar();
 		ArrayList<Producto> productos = ModeloProducto.getProductos();
 		
@@ -48,6 +49,37 @@ public class VerProductos extends HttpServlet {
 		    }
 		}
 		}
+		
+
+		String PrecioMin = request.getParameter("PrecioMin");
+		
+		if (PrecioMin != null && !PrecioMin.isEmpty()) {
+			double min = Double.MIN_VALUE;
+		 min = Double.parseDouble(PrecioMin);
+		Iterator<Producto> iterator = productos.iterator();
+		while (iterator.hasNext()) {
+		    Producto producto = iterator.next();
+		    if (producto.getPrecio() < min ) {
+		        iterator.remove();
+		    }
+		}
+		}
+		
+		String PrecioMax = request.getParameter("PrecioMax");
+		
+		if (PrecioMax != null && !PrecioMax.isEmpty()) {
+			double max = Double.MAX_VALUE;
+			max = Double.parseDouble(PrecioMax);
+		Iterator<Producto> iterator = productos.iterator();
+		while (iterator.hasNext()) {
+		    Producto producto = iterator.next();
+		    if (producto.getPrecio() > max ) {
+		        iterator.remove();
+		    }
+		}
+		}
+			
+		
 		request.setAttribute("productos", productos);
 		ModeloProducto.cerrar();
 		
