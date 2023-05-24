@@ -80,6 +80,7 @@ public class ModeloProducto extends Conector{
 		return productos;
 	}
 	
+	
 public Producto getProductoId(int id) {
 		ArrayList<Producto> productos = new ArrayList<Producto>();
 		Producto producto = new Producto();

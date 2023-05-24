@@ -3,6 +3,7 @@ package Controlador;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,9 +35,19 @@ public class VerProductos extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		ModeloProducto ModeloProducto = new ModeloProducto();
-
+		String cadena = request.getParameter("cadena");
 		ModeloProducto.conectar();
 		ArrayList<Producto> productos = ModeloProducto.getProductos();
+		
+		if( cadena != null) {
+		Iterator<Producto> iterator = productos.iterator();
+		while (iterator.hasNext()) {
+		    Producto producto = iterator.next();
+		    if (!producto.getCodigo().toLowerCase().contains(cadena) && !producto.getNombre().toLowerCase().contains(cadena)) {
+		        iterator.remove();
+		    }
+		}
+		}
 		request.setAttribute("productos", productos);
 		ModeloProducto.cerrar();
 		
