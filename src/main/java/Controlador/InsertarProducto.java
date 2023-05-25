@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,8 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import Modelo.ModeloProducto;
 import Modelo.ModeloSeccion;
+import Modelo.ModeloSupermercado;
 import Modelo.Producto;
 import Modelo.Seccion;
+import Modelo.Supermercado;
 
 /**
  * Servlet implementation class InsertarProducto
@@ -53,6 +56,13 @@ public class InsertarProducto extends HttpServlet {
 		e.printStackTrace();
 	}
        modeloSeccion.cerrar();
+       
+       ModeloSupermercado  modeloSupermercado = new ModeloSupermercado();
+       modeloSupermercado.conectar();
+       
+       ArrayList<Supermercado> Supermercados = modeloSupermercado.getSupermercados();
+       request.setAttribute("Supermercados", Supermercados);
+       modeloSupermercado.cerrar();
        request.getRequestDispatcher("InsertarProducto.jsp").forward(request, response);
 	}
 
@@ -68,7 +78,9 @@ public class InsertarProducto extends HttpServlet {
 		SimpleDateFormat fechaFormato = new SimpleDateFormat("yyyy-MM-dd");
 		Producto producto = new Producto();
 		
+		
 		int id = Integer.parseInt(request.getParameter("id"));
+	
 		String codigo = request.getParameter("codigo");
 		String nombre = request.getParameter("nombre");
 		int cantidad = Integer.parseInt(request.getParameter("cantidad"));
@@ -110,7 +122,17 @@ public class InsertarProducto extends HttpServlet {
 				} else {
 				ModeloProducto.insertarProducto(producto);
 				ModeloProducto.cerrar();
+				
+				String[] id_supermercados = request.getParameterValues("id_supermercado");
+				
+				for (String id_supermercado : id_supermercados) {
+					 ModeloSupermercado  modeloSupermercado = new ModeloSupermercado();
+				       modeloSupermercado.conectar();
+				       modeloSupermercado.insertarProductoEnSupermercado(id, id_supermercado);
+				       modeloSupermercado.cerrar();
+				}
 				request.getRequestDispatcher("VerProductos").forward(request, response);
+				
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
