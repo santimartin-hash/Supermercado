@@ -80,9 +80,13 @@ public class VerProductos extends HttpServlet implements Comparator<Producto>{
 		}
 		}
 		String Filtro = request.getParameter("Filtro");
-		if (Filtro != null )	{
+		if ( Filtro != null  && Filtro.equals("1")   )	{
 		productos.sort(this);
 		}
+		if ( Filtro != null && Filtro.equals("2")   ) {
+            Comparator<Producto> comparadorDescendente = new ComparatorDescendente();
+            productos.sort(comparadorDescendente);
+        }
 		request.setAttribute("productos", productos);
 		ModeloProducto.cerrar();
 		
@@ -104,11 +108,15 @@ public class VerProductos extends HttpServlet implements Comparator<Producto>{
 		return (producto1.getCodigo().compareTo(producto2.getCodigo()));
 	}
 	
-	/*public int compare2(Producto o1, Producto o2) {
-		Producto producto1 = (Producto) o1;
-		Producto producto2 = (Producto) o2;
-		return (producto1.getCodigo().compareTo(producto2.getCodigo()));
-	}*/
+	class ComparatorDescendente implements Comparator<Producto> {
+
+		  @Override
+		    public int compare(Producto o1, Producto o2) {
+		        Producto producto1 = (Producto) o1;
+		        Producto producto2 = (Producto) o2;
+		        return producto2.getCodigo().compareTo(producto1.getCodigo());
+		    }
+	}
 
 
 }
