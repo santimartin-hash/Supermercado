@@ -54,7 +54,7 @@
               <td>${producto.precio}</td>
               <td>${producto.caducidad}</td>
               <td>${producto.nombreSeccion}</td>
-              <td><a href="ModificarProducto?producto_id=${producto.id}" class="btn btn-secondary" style="margin-left: 40px;">Modificar</a></td>
+              <td><a href="ModificarProducto?producto_id=${producto.id}" class="btn btn-secondary" style="margin-left: 40px;">Modificar</a><a href="EliminarEspecial?producto_id=${producto.id}" class="btn btn-danger" style="margin-left: 40px;">Eliminar</a></td>
             </tr>
           </c:forEach>
         </tbody>

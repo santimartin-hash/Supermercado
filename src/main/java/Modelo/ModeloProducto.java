@@ -127,4 +127,47 @@ public String ConsultarCodigo(String codigo) throws SQLException {
 		
 		return producto.getCodigo();
 	}
+
+public void DisminuirStock(int id, int stock) throws SQLException {
+	pst = conexion.prepareStatement("UPDATE productos SET cantidad=? WHERE id=?");
+	
+	pst.setInt(2, id);
+	pst.setInt(1, stock);
+	pst.execute();
+
+}
+public int CountProductosEnSupermercado(int id) throws SQLException {
+	pst = conexion.prepareStatement("select COUNT(*) as count from productos_supermercados where id_producto = ? ");
+	
+	pst.setInt(1, id);
+	
+	pst.executeQuery();
+
+	rs = pst.executeQuery();
+	
+	int CountProductoEnSupermercado = 0;
+	
+	while(rs.next()) {	
+		CountProductoEnSupermercado = rs.getInt("count");
+	}
+	
+	return CountProductoEnSupermercado;
+}
+
+public void EliminarProductoDeTodosLosSupermercados(int id) throws SQLException {
+	pst = conexion.prepareStatement("DELETE FROM `productos_supermercados` WHERE id_producto = ?");
+	
+
+	pst.setInt(1, id);
+	pst.execute();
+
+}
+public void EliminarProducto(int id) throws SQLException {
+	pst = conexion.prepareStatement("DELETE FROM `productos` WHERE id = ?");
+	
+
+	pst.setInt(1, id);
+	pst.execute();
+
+}
 }
