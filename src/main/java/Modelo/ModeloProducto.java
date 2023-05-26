@@ -170,4 +170,29 @@ public void EliminarProducto(int id) throws SQLException {
 	pst.execute();
 
 }
+public void EliminarProductoCodigo(String Codigo) throws SQLException {
+	pst = conexion.prepareStatement("DELETE FROM `productos` WHERE codigo = ?");
+	
+
+	pst.setString(1, Codigo);
+	pst.execute();
+
+}
+public int ComprobarSiCodigoExixte(String codigo) throws SQLException {
+	pst = conexion.prepareStatement("select COUNT(*) as count from productos where codigo = ? ");
+	
+	pst.setString(1, codigo);
+	
+	pst.executeQuery();
+
+	rs = pst.executeQuery();
+	
+	int CodigoExistente = 0;
+	
+	while(rs.next()) {	
+		CodigoExistente = rs.getInt("count");
+	}
+	
+	return CodigoExistente;
+}
 }

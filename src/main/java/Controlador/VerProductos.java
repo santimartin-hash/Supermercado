@@ -35,6 +35,7 @@ public class VerProductos extends HttpServlet implements Comparator<Producto>{
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+			
 		ModeloProducto ModeloProducto = new ModeloProducto();
 		String cadena = request.getParameter("cadena");
 	
@@ -88,7 +89,6 @@ public class VerProductos extends HttpServlet implements Comparator<Producto>{
             productos.sort(comparadorDescendente);
         }
 		request.setAttribute("productos", productos);
-		ModeloProducto.cerrar();
 		
 		request.getRequestDispatcher("VerProducto.jsp").forward(request, response);
 	}
