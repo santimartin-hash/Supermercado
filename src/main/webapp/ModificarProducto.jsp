@@ -45,10 +45,14 @@
       <label>Caducidad:</label>
       <input type="date" name="caducidad" class="form-control"  value="${producto.caducidad}" required /><br/>
     </div>
- <div class="form-group">
-      <label>id seccion:</label>
-      <input type="text" name="seccion" class="form-control"  value="${producto.id_seccion}" required /><br/>
-    </div>
+ <c:forEach  items="${secciones}" var="seccion">
+ <div class="form-check">
+  <input class="form-check-input" type="radio" name="seccion" id="seccion" value="${seccion.id}" <c:if test="${producto.id_seccion ==  seccion.id}">checked</c:if>>
+  <label class="form-check-label" for="secciones">
+    ${seccion.nombre}
+  </label>
+</div>
+  </c:forEach>
     <input type="submit" value="Continuar" class="btn btn-primary mt-4" name="continuar_insertar_seccion"/>
   </form>
 </div>
