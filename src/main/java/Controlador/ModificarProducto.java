@@ -27,76 +27,77 @@ import Modelo.Supermercado;
 @WebServlet("/ModificarProducto")
 public class ModificarProducto extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ModificarProducto() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ModeloSeccion modeloSeccion = new ModeloSeccion();
-        modeloSeccion.conectar();
-       try {
-		ArrayList<Seccion> secciones = modeloSeccion.getSecciones();
-		request.setAttribute("secciones", secciones);
-		
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+	public ModificarProducto() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
-       modeloSeccion.cerrar();
-    
-       ModeloSupermercado  modeloSupermercado = new ModeloSupermercado();
-       modeloSupermercado.conectar();
-       
-       ArrayList<Supermercado> Supermercados = modeloSupermercado.getSupermercados();
-       request.setAttribute("Supermercados", Supermercados);
-       modeloSupermercado.cerrar();
-       
-       
-	int id = Integer.parseInt(request.getParameter("producto_id"));
-	
-	ModeloProducto modeloProducto = new ModeloProducto();
-	modeloProducto.conectar();
-	Producto producto = modeloProducto.getProductoId(id);
-	request.setAttribute("producto", producto);
-	try {
-		int CountProductosEnSupermercado = modeloProducto.CountProductosEnSupermercado(id);
-		if (CountProductosEnSupermercado > 0) {
-			ArrayList<Integer> SupermercadosDeProducto = modeloProducto.ListaDeSupermercadosDeProducto(id);
-			/*
-			for (int supermercado : SupermercadosDeProducto) {
-				System.out.println(supermercado);
-			}*/
-			request.setAttribute("SupermercadosDeProducto", SupermercadosDeProducto);
-		}
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	modeloProducto.cerrar();
-	   request.getRequestDispatcher("ModificarProducto.jsp").forward(request, response);
-	}
+
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 /*productos en supermercado */
-		ArrayList<Integer> SupermercadosDeProducto = (ArrayList<Integer>) request.getAttribute("SupermercadosDeProducto");
-	   System.out.println(SupermercadosDeProducto);
-		ModeloProducto ModeloProducto = new ModeloProducto();
-		 ModeloSupermercado  modeloSupermercado = new ModeloSupermercado();
-	 
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		ModeloSeccion modeloSeccion = new ModeloSeccion();
+		modeloSeccion.conectar();
+		try {
+			ArrayList<Seccion> secciones = modeloSeccion.getSecciones();
+			request.setAttribute("secciones", secciones);
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		modeloSeccion.cerrar();
 		
+
+		ModeloSupermercado modeloSupermercado = new ModeloSupermercado();
+		modeloSupermercado.conectar();
+
+		ArrayList<Supermercado> Supermercados = modeloSupermercado.getSupermercados();
+		request.setAttribute("Supermercados", Supermercados);
+		modeloSupermercado.cerrar();
+
+		int id = Integer.parseInt(request.getParameter("producto_id"));
+
+		ModeloProducto modeloProducto = new ModeloProducto();
+		modeloProducto.conectar();
+		Producto producto = modeloProducto.getProductoId(id);
+		request.setAttribute("producto", producto);
+		try {
+			int countProductosEnSupermercado = modeloProducto.CountProductosEnSupermercado(id);
+			if (countProductosEnSupermercado > 0) {
+				ArrayList<Integer> supermercadosDeProducto = modeloProducto.ListaDeSupermercadosDeProducto(id);
+
+				request.setAttribute("SupermercadosDeProducto", supermercadosDeProducto);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		modeloProducto.cerrar();
+		
+		
+		request.getRequestDispatcher("ModificarProducto.jsp").forward(request, response);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		ModeloProducto ModeloProducto = new ModeloProducto();
+		ModeloSupermercado modeloSupermercado = new ModeloSupermercado();
+
 		SimpleDateFormat fechaFormato = new SimpleDateFormat("yyyy-MM-dd");
 		Producto producto = new Producto();
-		
+
 		int id = Integer.parseInt(request.getParameter("id"));
 		String codigo = request.getParameter("codigo");
 		String nombre = request.getParameter("nombre");
@@ -104,45 +105,51 @@ public class ModificarProducto extends HttpServlet {
 		Double precio = Double.parseDouble(request.getParameter("precio"));
 		String caducidad = request.getParameter("caducidad");
 		Date fechaCaducidad;
-		int id_seccion =Integer.parseInt( request.getParameter("seccion"));
-		
+		int id_seccion = Integer.parseInt(request.getParameter("seccion"));
+
 		String[] id_supermercados = request.getParameterValues("id_supermercado");
-	    /*for (String string : id_supermercados) {
-			System.out.println(string);
-		}*/
+		modeloSupermercado.conectar();
+		if (id_supermercados != null) {
+			modeloSupermercado.eliminarProductoEnSupermercados(id);
+			for (String id_supermercado : id_supermercados) {
+				modeloSupermercado.insertarProductoEnSupermercado(id, id_supermercado);
+			}
+		}
+		modeloSupermercado.cerrar();
+		
 		producto.setId(id);
 		producto.setCodigo(codigo);
 		producto.setNombre(nombre);
 		producto.setCantidad(cantidad);
 		producto.setPrecio(precio);
 		producto.setId_seccion(id_seccion);
-		
+
 		try {
 			fechaCaducidad = fechaFormato.parse(caducidad);
 			producto.setCaducidad(fechaCaducidad);
-			
+
 			ModeloProducto.conectar();
 			Calendar calendar = Calendar.getInstance();
-	        Date currentDate = calendar.getTime();        
-			if (precio < 0 || cantidad < 0){
+			Date currentDate = calendar.getTime();
+			if (precio < 0 || cantidad < 0) {
 				request.setAttribute("mensaje", "Precio y Cantidad deben de ser positivos");
 				request.getRequestDispatcher("ModificarProducto.jsp").forward(request, response);
-			} else if (fechaCaducidad.before(currentDate)){
+			} else if (fechaCaducidad.before(currentDate)) {
 				request.setAttribute("mensaje", "Fecha invalida");
 				request.getRequestDispatcher("ModificarProducto.jsp").forward(request, response);
-			} else if (id_seccion == 0){
+			} else if (id_seccion == 0) {
 				request.setAttribute("mensaje", "introduce una seccion");
 				request.getRequestDispatcher("ModificarProducto.jsp").forward(request, response);
 			} else {
-			ModeloProducto.modificarProducto(producto);
-			ModeloProducto.cerrar();
-			request.getRequestDispatcher("VerProductos").forward(request, response);
+				ModeloProducto.modificarProducto(producto);
+				ModeloProducto.cerrar();
+				request.getRequestDispatcher("VerProductos").forward(request, response);
 			}
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 }

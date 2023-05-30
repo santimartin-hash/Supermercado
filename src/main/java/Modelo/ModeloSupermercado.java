@@ -48,13 +48,11 @@ public void insertarProductoEnSupermercado( int id, String id_supermercado) {
 	}
 
 }
-public void eliminarProductoEnSupermercado( int id, int id_supermercado) {
+public void eliminarProductoEnSupermercados( int id) {
 	
 	try {
-		pst = conexion.prepareStatement("Delete * from productos_supermercados where id_producto = ? and id_supermercado = ?");
-
+		pst = conexion.prepareStatement("Delete from productos_supermercados where id_producto = ? ");
 		pst.setInt(1,id);
-		pst.setInt(2, id_supermercado);
 		pst.execute();
 		
 
