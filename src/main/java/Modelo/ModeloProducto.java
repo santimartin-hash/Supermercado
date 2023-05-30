@@ -195,4 +195,43 @@ public int ComprobarSiCodigoExixte(String codigo) throws SQLException {
 	
 	return CodigoExistente;
 }
+public ArrayList<Integer> ListaDeSupermercadosDeProducto(int id) throws SQLException {
+	pst = conexion.prepareStatement("select id_supermercado from productos_supermercados where id_producto = ?;");
+	
+	pst.setInt(1, id);
+	
+	pst.executeQuery();
+
+	rs = pst.executeQuery();
+	
+	ArrayList<Integer> idSupermercadosList = new ArrayList<>();
+	
+
+	int id_supermercado;
+	
+	while(rs.next()) {	
+		id_supermercado = rs.getInt("id_supermercado");
+		idSupermercadosList.add(id_supermercado);
+	}
+	
+	return idSupermercadosList;
+}
+
+public int ComprobarSiExisteEnSupermercado(int id, String id_supermercado ) throws SQLException {
+	pst = conexion.prepareStatement("select COUNT(*) as count from productos_supermercados where id_producto = ? and id_supermercado = ? ");
+	
+	pst.setInt(1, id);
+	pst.setString(1, id_supermercado);
+	pst.executeQuery();
+
+	rs = pst.executeQuery();
+	
+	int CountProductoEnSupermercado = 0;
+	
+	while(rs.next()) {	
+		CountProductoEnSupermercado = rs.getInt("count");
+	}
+	
+	return CountProductoEnSupermercado;
+}
 }

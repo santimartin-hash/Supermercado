@@ -35,13 +35,18 @@
         <button class="btn btn-outline-danger">EliminarMultiple</button>
       </form>
     </div>
+
 <a href="VerProductos?Filtro=1" class="btn btn-secondary">Codigo Ascendente</a>
 <a href="VerProductos?Filtro=2" class="btn btn-secondary">Codigo Descendente</a>
+
      <h3 class="mt-5">Productos:</h3>
     <div class="table-container mt-5">
+    <form class="form-inline" style="margin-bottom: 20px" method="post" action="EliminarMultiplev2">
+     
       <table class="table table-striped table-dark table-responsive-md mt-5">
         <thead>
-          <tr>
+          <tr>       
+          	<th></th>  
             <th>id</th>
             <th>codigo</th>
             <th>Nombre</th>
@@ -55,6 +60,7 @@
         <tbody>
           <c:forEach items="${productos}" var="producto" varStatus="loop">                  
             <tr>
+           	  <td><input class="form-check-input" type="checkbox" value="${producto.id}" id="seleccionados" name="seleccionados"></td>
               <td>${producto.id}</td>
               <td>${producto.codigo}</td>
               <td>${producto.nombre}</td>
@@ -67,6 +73,9 @@
           </c:forEach>
         </tbody>
       </table>
+      
+       <button class="btn btn-danger" type="submit">Eliminar</button>
+       </form>
     </div>
   </div>
 </body>

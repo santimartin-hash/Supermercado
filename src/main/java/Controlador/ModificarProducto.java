@@ -16,8 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import Modelo.ModeloProducto;
 import Modelo.ModeloSeccion;
+import Modelo.ModeloSupermercado;
 import Modelo.Producto;
 import Modelo.Seccion;
+import Modelo.Supermercado;
 
 /**
  * Servlet implementation class ModificarProducto
@@ -50,13 +52,34 @@ public class ModificarProducto extends HttpServlet {
 	}
        modeloSeccion.cerrar();
     
-	
+       ModeloSupermercado  modeloSupermercado = new ModeloSupermercado();
+       modeloSupermercado.conectar();
+       
+       ArrayList<Supermercado> Supermercados = modeloSupermercado.getSupermercados();
+       request.setAttribute("Supermercados", Supermercados);
+       modeloSupermercado.cerrar();
+       
+       
 	int id = Integer.parseInt(request.getParameter("producto_id"));
 	
 	ModeloProducto modeloProducto = new ModeloProducto();
 	modeloProducto.conectar();
 	Producto producto = modeloProducto.getProductoId(id);
 	request.setAttribute("producto", producto);
+	try {
+		int CountProductosEnSupermercado = modeloProducto.CountProductosEnSupermercado(id);
+		if (CountProductosEnSupermercado > 0) {
+			ArrayList<Integer> SupermercadosDeProducto = modeloProducto.ListaDeSupermercadosDeProducto(id);
+			/*
+			for (int supermercado : SupermercadosDeProducto) {
+				System.out.println(supermercado);
+			}*/
+			request.setAttribute("SupermercadosDeProducto", SupermercadosDeProducto);
+		}
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	modeloProducto.cerrar();
 	   request.getRequestDispatcher("ModificarProducto.jsp").forward(request, response);
 	}
@@ -64,8 +87,13 @@ public class ModificarProducto extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		 /*productos en supermercado */
+		ArrayList<Integer> SupermercadosDeProducto = (ArrayList<Integer>) request.getAttribute("SupermercadosDeProducto");
+	   System.out.println(SupermercadosDeProducto);
 		ModeloProducto ModeloProducto = new ModeloProducto();
-
+		 ModeloSupermercado  modeloSupermercado = new ModeloSupermercado();
+	 
+		
 		SimpleDateFormat fechaFormato = new SimpleDateFormat("yyyy-MM-dd");
 		Producto producto = new Producto();
 		
@@ -78,6 +106,10 @@ public class ModificarProducto extends HttpServlet {
 		Date fechaCaducidad;
 		int id_seccion =Integer.parseInt( request.getParameter("seccion"));
 		
+		String[] id_supermercados = request.getParameterValues("id_supermercado");
+	    /*for (String string : id_supermercados) {
+			System.out.println(string);
+		}*/
 		producto.setId(id);
 		producto.setCodigo(codigo);
 		producto.setNombre(nombre);
